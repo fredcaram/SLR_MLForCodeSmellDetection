@@ -1,0 +1,205 @@
+% ----------------------------------------------------------
+% Parte de revisão de literatura
+% ----------------------------------------------------------
+\section{Introduction}
+
+%  Is my research question clear?
+%
+%  Does my Introduction act as a clear road map for understanding my paper?
+%
+%  Is it sufficiently different from the Abstract, without any cut and pastes? (\hl{some} overlap is fine)
+%
+%  Have I mentioned only what my readers specifically need to know and what I will subsequently refer to in the Discussion?
+%
+%  Have I been as concise as possible?
+%
+%  Have I used tenses correctly? present simple (general background context, description of what will be done in the paper), present perfect (past to present solutions), past simple (my contribution, though this may also be expressed using the present simple or future simple)
+
+% It explains why there is a need or a problem and how the author will deal with it. The introduction usually motivates the present study, provides a literature review, and explains how the current work fits with what has gone before.
+
+%    1    What is the problem?
+%    2    Why is it interesting and important?
+%    3    Why is it hard? (E.g., why do naive approaches fail?)
+%    4    Why has not it been solved before? (Or, what's wrong with previous proposed solutions? How does mine differ?)
+%    5    What are the key components of my approach and results? Also include any specific limitations.
+One of the most costly operations involving software development is maintenance, it has been reported that above 75\% of the total software cost is used for maintenance activities~\citep{bennett2000software, liu2012schedule}. A important factor regarding it is the quality of the written code, since it affects the readability of the code, and hence its maintainability~\citep{aggarwal2002integrated}, since software maintainers spend around 60\% of their time understanding the code they are working at~\citep{abran1993measurement}. But even in cautiously designed systems, the quality of the source code tends to degrade as the project evolves, since a system’s original design is rarely prepared for every new requirement and the quick changes made by different people without properly adjusting the system’s structure~\citep{seng2006search}. Another factor is that developers also tends to focus on the addition of the new functions and bug fixes rather than improving software maintainability~\citep{tufano2015and}.  They also tend to overlook it when it is seemly complex and when it seems not to be critical to maintain the longevity of the software~\citep{murphy2012we}
+
+A common way to avoid this degradation is to identify and fix those flaws as they appear. In object oriented code, one of the main descriptions of these code issues are the code smells~\citep{mens2004survey}. Code smells provide heuristics for the identification of design flaws in the source code that make software harder to evolve, comprehend and maintain. Each code smell examines a specific kind of system elements (class, methods, etc...) that can be evaluated by its characteristics~\citep{olbrich2009evolution}. For example a commonly occurring code smell is the duplicated code, where you have codes with the same behaviour in different parts of the application as follows:
+\begin{lstlisting}
+public interface Employee {
+    double calculate_salary();
+}
+public class Director implements Employee {    
+    public double calculate_salary() {  //duplicated code
+        return self.dailyPayment * self.workedDays;
+    };
+}
+public class Manager implements FileType {
+    public double calculate_salary() { //duplicated code
+        return self.dailyPayment * self.workedDays;
+    };
+}
+\end{lstlisting}
+
+In the snippet possible to notice that the \textit{calculate\_salary} method has the same implementation among the different \textit{classes}, this code is problematic since as the code-base grows since if you change the code in one of the classes and do not change it in another you can introduce an inconsistent behaviour in your application, leading to an increase in the software complexity and stacking of bad quality code. Another example of code smells is the Data Class, this smell indicates classes that only have fields and properties but no behaviour, as shown on the code snippet:
+
+\begin{lstlisting}
+public class Employee{    
+    public string name;
+    public string address;
+    public Date birth_date;
+    public double salary;
+}
+\end{lstlisting}
+
+This kind of class hurt the object orientation principles by having a class without any behaviour, but in many cases and architectures, such as for \textit{ViewModels} in MVC architectures this is a desirable behaviour. In those scenarios it would not be considered a code smell by the developers but an architectural option. As shown on the previous scenario the code smells provides many guidelines to identify unwanted behaviour and common coding mistakes, but it is still dependent on the programmers interpretation~\citep{fowler1999refactoring}, since it can have different interpretations according to the scenario. The definition of what is and what is not a code smell in a given context may not be a consensus among developers working in the same application~\citep{bryton2009strengthening, fontana2016comparing}. Making their identification an error-prone and time-consuming task given the size of some commercial applications~\citep{murphy2012we}.
+
+In order to reduce this subjective interpretation, automated approaches based on the source code were presented in previous works~\citep{fontana2012automatic, fokaefs2007jdeodorant, mantyla2004bad, rasool2015review}, but a relevant part of those approaches are based on code metrics.~\citep{bryton2010reducing, counsell2010strategy, marinescu2004detection, moha2010decor, rasool2015review}. These techniques uses metrics and thresholds that are not consistent among them, leading to an increasing number of false positives, not representing real problem~\citep{fontana2016comparing}. Since it does not consider information related to the context, domain, size and design of the system~\citep{ferme2013real}. In this scenario, Machine Learning techniques can be used to capture this subjectivity. Machine learning techniques are used for a wide range of applications such as risk management~\citep{cowell2007modeling}, medicine~\citep{akay2009support}, biology~\citep{kell2006metabolomics}, financial markets~\citep{doostmohammadi2017day} among others~\citep{fenton2007managing, li2017deep}. And can also be used for the identification of code smells in source code, providing further flexibility in comparison to the current metrics based approaches~\citep{kotsiantis2007supervised}.
+
+This study has as primary objective the identification of which methods and practices are mostly used when applying machine learning for code smells identification and which machine learning techniques are being applied for code smells identification. For that end we developed a mapping study on Machine Learning techniques and code smells found in literature, covering papers from the introduction of anti-patterns in 1999 by~\cite{fowler1999refactoring} up to and including papers publishing until December 2016.  The design flaws were categorized under the definition of the works defined by~\cite{fowler1999refactoring} and~\cite{brown1998antipatterns}. The study resulted in the classification of 26 papers out of 53 researched papers, separated and categorized by design flaws and applied techniques, we found that regarding f-measure the best average performance was provided by Decision Tree, followed by Random Forest, Semi-supervised and Support Vector Machine Classifier techniques. While Bayesian Network, Linear Discriminant Analysis and Naive Bayes presented the worst performance overall between the studied practices. 
+
+This chapter was organized according to the following structure:  Section 2 provides a background research about code smells, refactoring, and Machine Learning techniques; Section 3 presents the related works; Section 4 addresses the methodology used for this work; Section 5 displays the results of the SLR; Finally, Section 6 discusses the results of the work and provides suggestions for future work.
+
+
+\section{Background}
+
+\subsection{Code smells}
+
+There has been extensive researches focusing on the study of bad design practices, also called code smells, defects, anti-patterns or anomalies~\citep{sahin2014code}. But code smells is widely used to address source code level flaws. This concept was firstly introduced by~\citet{fowler1999refactoring} and was initially defined as "indications that there is trouble that can be solved by refactorings". They represent "poor" solutions to recurring implementations and design problems that impede the maintenance and evolution of programs~\citep{khomh2011}. Code smells are symptoms, which can, but not necessarily have to, point to an actual issue. Therefore, they are not patterns to be avoided, but easy to notice signals that require a more thorough examination~\citep{walter2016relationship}.  Follows a short description of each smell proposed by~\citet{fowler1999refactoring}:
+\begin{itemize}
+	\item \textbf{Long Method (LM)} is a method that is long, so it is hard to understand, change or extend.
+	\item \textbf{Large Class (LC)} is a class that tries to do a load of things, having plenty of instance variables or methods.
+	\item \textbf{Primitive Obsession (PO)} represents the usage of primitives instead of small classes, making it less meaningful and reusable.
+	\item \textbf{Long Parameter List} is a parameter that is very long and difficult to represent.
+	\item \textbf{Data Clumps (DAC)} data items that usually appear together.
+	\item \textbf{Switch Statements (SS)} usage of type codes or run-time class type detection instead of polymorphism.
+	\item \textbf{Temporary Field (TF)} the class has a variable which is only used in specific situations.
+	\item \textbf{Refused Bequest (RB)} a child class does fully support its parent implementation.
+	\item \textbf{Alternative Classes with Different Interfaces (ACDI)} a case where a class can operate with alternative classes but the interface of these classes is different.
+	\item \textbf{Parallel Inheritance Hierarchies (PIH)} a situation where two parallel class hierarchies exists but are related.
+	\item \textbf{Lazy class (LAZ)} a class that is not doing enough and should be removed.
+	\item \textbf{Data class (DC)} a class that contains data but does not contain logic.
+	\item \textbf{Duplicate Code (DUC)} a code that does the same thing as another piece of code.
+	\item \textbf{Speculative Generality (SG)} when unnecessary code is created anticipating future changes on software.
+	\item \textbf{Message Chains (MC)} a chain of calls from one object to another, without adding any new behaviour.
+	\item \textbf{Middle Man (MM)} when a class delegates a great deal of its behaviour to another class.
+	\item \textbf{Feature Envy (FE)} a method that is more interested in other classes properties then its the ones from its own class.
+	\item \textbf{Inappropriate Intimacy (II)} when two classes are tightly coupled.
+	\item \textbf{Divergent Change (DC)} when a class need to be changed every-time another class is changed.
+	\item \textbf{Shotgun Surgery (SS)} when a class changes requires a broadcast changing of other classes.
+	\item \textbf{Incomplete Library Class (ILC)} When the software uses an incomplete library.
+	\item \textbf{Comments (COM)} misuse of comments to compensate poor code structure.
+\end{itemize}
+
+~\citet{mantyla2003bad} categorized code smells into 8 categories: 
+\begin{itemize}
+    \item \textbf{The Bloaters:} Represents something that has grown so large that it cannot be effectively handled. This category cover the following smells: Long-Method; Large Class; Primitive Obsession; Long Parameter List; and Data Clumps.
+    \item \textbf{The Object-Orientation Abusers:} Represents code that do not exploit the possibilities of Object-Oriented Design (OOD). The following smells are included in this category: Switch Statements; Temporary Fields; Refused Bequest; Alternative Classes with Different Interfaces; Parallel Inheritance Hierarchies.
+    \item \textbf{The Change Preventers:} Smells that prevent or hinder the changing or further development of the system. This category is composed by: Shotgun Surgery and Divergent Change.
+    \item \textbf{The Dispensables:} Represent something that is unnecessary and should be removed from the code. Represented by the smells: Lazy class; Data class; Duplicated Code and Speculative Generality.
+    \item \textbf{The Encapsulators:} Smells that deals with data communication or encapsulation, including Message Chains and Middle Man.
+    \item \textbf{The Couplers:} Smells that increases the coupling of the system, being composed by Feature Envy and Inappropriate Intimacy
+    \item \textbf{Others:} Smells that do not fit in any of the previous categories and are not comparable, such as: Incomplete Library Classes and Comments.
+\end{itemize}
+
+Code smells can also be considered as symptom of a design level flaw, also known as anti-patterns~\citep{moha2010decor}. The anti-patterns concept was introduced by~\citet{brown1998antipatterns} putting it as a literary form that describes a recurrent solution to a problem that generates decidedly negative consequences. The studies also use approaches to identify the code anti-patterns instead of code smells, since they describe more generic flaws, in this study we use three of them:
+\begin{itemize}
+	\item \textbf{The Blob}: corresponds to a large controller class that depends on data stored in surrounded data classes. A large class declares fields and methods with a low cohesion. A controller class monopolizes  the processing done by a system, takes the main decisions, and directs the processing of other classes. 
+    \item \textbf{The Functional Decomposition}: consists of a main class  in which inheritance and polymorphism are scarcely used, associated with small classes, which declare a great deal of private fields and implement only sparse methods.
+    \item \textbf{The Spaghetti Code}: classes with no structure, declaring long methods with no parameters, and utilizing global variables for processing. Names of classes and methods may suggest procedural programming.
+\end{itemize}
+
+The main purpose to identify design flaws is to fix it before it degrades, this practice of improving the design of an existing piece of code without of changing its behavior is known as refactoring~\citep{granhem2014model}. Refactoring aims to restructure the internal structure of object-oriented software without changing its external behaviors, to improve the quality of software~\citep{fowler1999refactoring}. It is a safe and effective technique to improve the quality of software because it guarantees preserving the observable behavior of software. In addition, refactoring has been widely accepted as an important activity in software development and maintenance~\citep{lee2011automated}. 
+
+\subsubsection{Code smell identification}
+
+
+Code smell identification techniques can be classified in 7 categories according to their nature, as categorized by~\citet{rasool2015review}:
+\begin{enumerate}
+    \item \textbf{Manual code smell detection techniques:} Manual techniques presented by researchers when Fowler identified code smells
+    \item \textbf{Metrics-based techniques:} Similar in concepts to the manual techniques as they depend on source code metrics, but they differ in how they apply metrics and which types of code smells they focus on.
+    \item \textbf{Symptoms-based techniques:} Use different symptoms/notations translated into detection algorithms. The conversion of symptoms into detection rules requires analysis and interpretation effort to select proper threshold values
+    \item \textbf{Visualization-based code smell detection techniques:} Use the semi-automated process for the detection of code smells. These techniques integrate the capability of human expertise with the automated detection process. The limitation of these techniques is human effort, and they have scalability problems for large systems. These techniques are also error prone because of wrong human judgment.
+    \item \textbf{Probabilistic-based code smell detection techniques:} Apply bayesian and fuzzy logic rules that include quantitative properties and relationships among classes. These techniques rank candidate smells using fuzzy logic inference rules and handle uncertainty in the code smell detection process
+    \item \textbf{Search-based code smell detection techniques:} Apply different algorithms for the detection of code smells directly from source code. Usually, the techniques in this category apply machine learning algorithms. These techniques learn from standard design and coding practices and examine how code deviates from these practices
+    \item \textbf{Cooperative-based code smell techniques:} Perform different activities in a cooperative way for improving performance of activities. The cooperative-based techniques became more common in the later years, as they can improve accuracy and performance for code smell detection
+\end{enumerate}
+
+From the techniques above, the manual one is the best known, it eliminates uncertainties of the process, but due to its human-centric approach it is time-consuming and error prone~\citep{counsell2010strategy}. The techniques 2 and 3 uses thresholds to determine the presence or absence of code smells, but its accuracy is dependent on the proper selection of threshold values, which are usually empirical and unreliable~\citep{ferme2013real}. The forth approach tries to reduce the uncertainty with the use of both human and automated approaches. While the remaining ones use statistical or machine learning approaches to try to reduce this uncertainty but require large amounts of human annotated data and it also dependant on the quality of this data~\citep{rasool2015review}.
+
+\subsubsection{Empirical studies on code smells}
+Empirical researches demonstrated a relationship between structural attributes (design metrics) and external quality metrics (code smell and class error tendencies)~\citep{shatnawi2008effectiveness}. Another study found that the process of smell detection can serve as a systematic method for identifying and restructuring problematic classes. In the same study, it was also examined the presence of six code smells, finding that the Shotgun Surgery smell showed correlation with increased defect proneness~\citep{li2007empirical}. The result was questioned afterward in an analysis of 7 open source systems: that found no correlation between Feature Envy and Shotgun Surgery with high defect proneness~\citep{dambros2010impact}. 
+
+A further experiment showed that only a handful of the issues could be interpreted with smells, while problems such as Appropriate Naming, Architecture and Existing defects could not be captured with the smell analysis~\citep{yamashita2012code}. A study by~\cite{hall2014some} examined the relation between defects and five code smells. Results were again inconclusive: some code smells appeared to have no effect on the defect-proneness (e.g. Switch Statements), others increased it (e.g. Message Chains), other reduced the number of defects (e. g.  Middle Man and Speculated Generality), and the results for other smells (e. g. Data Clumps) were inconclusive. The study by \citet{palomba2014reallysmell} investigates the developers perceptions regarding the code smells and found that the following smells are not perceived as design problem: Class Data Should Be Private, Middle Man, Long Parameter List, Lazy Class, and Inappropriate Intimacy. They also may or may not represent the “intensity” of the problem and that smells related to complex/long source code are perceived as a threat. An experimental study concerning the impact of dependencies between classes with design patterns and anti patterns on defect and change proneness demonstrated that classes having dependencies with anti-patterns exhibit more defects than those with dependencies with design patterns~\citep{jaafar2016evaluating}. Another study also found that code smells do have a negative impact on classes~\citep{khomh2009exploratory}
+
+These works demonstrated that the impact of code smells in the quality of the code varies, depending on the individual smell, and on the analyzed system~\citep{walter2016relationship}. Another important factor is that the manual recognition of code smells on the source depends on the developer’s degree of experience and perception, which is error prone and time-consuming~\citep{counsell2010strategy}, since part of the time the developers are not aware of their presence in the code~\citep{yamashita2013developers}.
+
+\subsection{Machine Learning} 
+
+Machine learning algorithms instances can be represented using the same set of features. The features may be continuous, categorical or binary~\citep{kotsiantis2007supervised}. Machine learning techniques can be mainly categorized in three ways: supervised, unsupervised and semi-supervised. If instances are given with known labels (the human annotated correct output) then the learning is called supervised, otherwise, when the instances are unlabeled it is unsupervised learning~\citep{jain1999data}. There is also a hybrid approach, which is the semi-supervised learning that uses both labeled and unlabeled data to perform an otherwise supervised learning or unsupervised learning task~\citep{zhu2011semi}.
+
+Numerous Machine Learning applications involve tasks that can be set up as supervised~\citep{kotsiantis2007supervised}, which is also the leading approach used for code smells identification~\citep{fernandes2016review}. The major supervised approaches were identified by~\citet{kotsiantis2007supervised} in his literature review, as follows:
+\begin{itemize}
+    \item \textbf{Decision Trees:} Decision trees are trees that classify instances by sorting them based on feature values. Each node in a decision tree represents a feature in an instance to be classified, and each branch represents a value that the node can assume. Instances are classified starting at the root node and sorted based on their feature values. 
+    \item \textbf{Learning Set of Rules:} Decision trees can be translated into a set of rules by creating a separate rule for each path from the root to a leaf in the tree. However, rules can also be induced from training data using a variety of rule-based algorithms.
+    \item \textbf{Single layered perceptrons:} Uses a single layer of weights to define a linearly separable binary classification.
+    \item \textbf{Multi layered perceptrons (Artificial Neural Network):} Created to solve non linear classification problems that cannot be solved by a single layer. A multi-layer neural network consists of large number of units (neurons) joined together in a pattern of connections. 
+    \item \textbf{Radial Basis Function (RBF) network:} An RBF network is a three-layer feedback network, in which each hidden unit implements a radial activation function and each output unit implements a weighted sum of hidden units outputs.
+    \item \textbf{Naive Bayes:} Naive Bayesian networks (NB) are simple Bayesian networks which are composed of graphs with only one unobserved node and a chain of children observed nodes, with a assumption of state independence between child nodes and their parent. The Naive Bayes is based on estimating the probabilities of the unobserved node, based on the observed ones.
+    \item \textbf{Bayesian networks:} A Bayesian Network (BN) is a graph based model that establishes a probability relationships among a set of known variables. The Bayesian network structure is a graph containing nodes linked with its features. The features must be conditionally independent from their non-descendants in relation to its parents.
+    \item \textbf{Instance Based learning:}  Instance-based learning algorithms is a statistical based and lazy-learning algorithms, as they delay the induction or generalization process until classification is performed
+    \item \textbf{Support Vector Machines (SVM):} SVMs re based on the notion of a “margin” in either side of a hyperplane separating two features. Its optimizing objective is to increase the margin and create the largest distance between features in the hyperplane. The complexity is unaffected by the number of features. So SVMs are suited to deal with learning tasks where the number of features is large with respect to the number of training instances.
+\end{itemize}
+
+Unsupervised learning are composed mainly by Clustering Techniques. The clustering objective is to develop an automatic algorithm that discovers the natural groupings in the unlabeled data~\citep{jain1999data}. Clustering algorithms can be broadly divided into two groups: hierarchical and partitional. Hierarchical clustering algorithms recursively find nested clusters, while the partitional clustering find the clusters simultaneously. In semi-supervised clustering, instead of specifying the class labels, constraints are specified, as a weaker way of encoding the labeled data. Semi-supervised learning can be applied in place supervised learning, using unlabeled data for training~\citep{jain2010data}. Semi-supervised learning has been applied to natural language processing (word sense disambiguation , document categorization, named entity classification, sentiment analysis, machine translation), computer vision (object recognition, image segmentation), bio-informatics (protein function prediction), and cognitive psychology~\citep{zhu2011semi}.
+
+Machine learning techniques has also been used to address code smell identification problems, as exposed by Figure \ref{fig:smellDetectionTechniquesRelation}.
+
+\begin{figure}[hbt] 
+	\caption{Code smell techniques relationship}
+	\label{fig:smellDetectionTechniquesRelation}
+	\includegraphics[width=0.95\textwidth]{imagens/smellDetectionTechniquesRelation.png}
+\end{figure}
+
+\section{Related work}
+
+The following studies regards reviews of code smell identification.~\citet{zhang2011code} reviewed 39 papers, searching for studies about any of the code smells, to assess how they contribute to the understanding of these code smells and their impact in the system maintainability, that study focuses in manual and static based techniques since Machine Learning based techniques were rare at the moment when the study happened, while our study focus only on Machine Learning techniques for code smell identification.
+
+The study by~\citet{rattan2013software} reviewed 213 studies regarding software clone identification, finding a lack definition of what a clone is and also a lack of empirical research regarding the harmfulness of clones. This study is different from ours since it focus in only one code smell and also do not focus on any particular technique or study type.
+
+\citet{al2015identifying} performed a review on 47 studies about the identification of opportunities for code refactoring activities. It tried to find what kind of refactoring techniques were more common and which techniques were used to identify these refactorings opportunities and how they were evaluated. Regarding this last objective it has found a lack of standardized and empirical data to support the techniques. This study differs from ours since it focus on refactoring rather than code smell.
+
+A review by~\citet{rasool2015review} covered 46 papers on the techniques and tools used for mining code smells from the source code of different software, it evaluates and compares the coverage of the smells by the techniques and their performance, it found out that the techniques are dependent on the proper selection of threshold values. This study has a broader scope than ours, trying to compare all the code smells and techniques, not focusing on the Machine Learning techniques and by doing so it does not analyze the used techniques, their nature and performance.
+
+The~\citet{fernandes2016review} review covered 107 papers regarding code smell detection tools, identifying a high redundancy between the smells identified by the tools, showing the need of better comparisons to choose appropriate tools for each smell. Our study differs from this, given that it focuses only on tools, but does not give a clue on the algorithms or techniques used by those tools.
+
+\input{metodologia2}
+
+\input{results}
+
+\section{Threats to validity}
+
+We have selected the search terms according the research questions, taking into consideration the defined acceptance criteria and have used them to retrieve the relevant studies in the four electronic databases. However, relevant studies may not use the terms related to the research questions in their titles, abstracts, or keywords. We also, purposely, left out broader terms such as refactoring and anti-patterns, in order to reduce the noise during the research stage, since terms can be referred to other fields out of code smells, leading to unrelated papers.  As a result, we may have the high risk of leaving out these studies in the automatic search process. In order to mitigate this risk we have defined a selection criteria that strictly comply with the research questions to prevent the desired studies from being excluded incorrectly. In addition, the decision regarding study selection was made through double confirmation, taking separate selections by graduated researchers and a disagreements resolution for the divergent selections. However, relevant studies may have been missed. If such studies do exist, we believe that the number of them is reduced.
+
+Another threat to validity is that the papers uses different projects to assess the results, but even the studies that uses the same project uses different annotations to train the data, decreasing the reliability of the performance comparisons. This threat is yet increased by publication bias, where the researches tend to release only positive results, avoiding the negative results, and also tend to show that their result is outperforms the others. In order to mitigate this threat we have registered the baseline that each study used, avoiding the comparison of studies developed on different projects with different baselines.
+
+\section{Conclusions}
+
+%    How can I assess the quality of my Conclusions? To make a self-assessment of your Conclusions, you can ask yourself the following questions.
+%    * Is what I have written really a Conclusions section? (If it is more than 200–250 words, then it probably isn’t – it needs to be much shorter)
+%    * If the conclusions are included in the Discussion, have I clearly signaled to the reader that I am about to discuss my conclusions (e.g. by writing In conclusion )?
+%    * Have I given a maximum of one line to comments related to descriptions of procedures, methodology, interviews etc.? (Generally such comments are not needed at all, unless the primary topic of your paper is the methodology itself)
+%    * Have I avoided cut and pastes from earlier sections? Do my Conclusions differ appropriately from my Abstract, Introduction and final paragraph of my Discussion?
+%    * Are my Conclusions interesting and relevant?
+%    * Have I given my Conclusions as much impact as possible and have I avoided any redundant expressions?
+%    * Have I avoided any unqualified statements and conclusions that are not completely supported?
+%    * Is my work as complete as I say it is? (i.e. I am not trying to get priority over other authors by claiming inferences that cannot really be drawn at this stage)
+%    * Have I introduced new avenues of potential study or explained the potential impact of my conclusions? Have I ensured that I have only briefly described these future avenues rather than getting lost in detail?
+%    * Are the possible applications I have suggested really feasible? Are my recommendations appropriate?
+%    * Have I used tenses correctly? present perfect (to describe what you have done during the writing process), past simple (what you did in the lab, in the field, in your surveys etc.)
+
+This study have reviewed 26 papers covering Machine Learning techniques for code smells identification. For each of these smells we have evaluated the studied smells, techniques and how they relate to each other and the performance of each of theses techniques for the code smells.
+
+We found that the techniques usually perform very close to each other, but Decision Tree, Random Forest, Semi-supervised and Nearest Neighbor techniques had an better performance overall, they also tend to be heterogeneous covering smells from different types, due to this fact, the techniques tend to have a high redundancy, without specializing in a single smell. Exceptions for those findings were the Bayes approaches that performed worst than the others, in general. The Association Rules and Decision tree algorithms displayed better usage for smells that involves the relationship between different methods, classes and structures.
+
+We also faced problems regarding the lack of comparability of the studies, since the studies usually uses annotations done by their own personal instead of using a common base, they also did not publish the results using the same metrics, making it harder to compare and asses their performance, reducing the reliability of the study and performance assertions. In order to improve the quality of the studies and allow the growth of Machine Learning techniques for code smell, more empirical studies in a common data-set is recommended.

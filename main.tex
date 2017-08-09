@@ -1,0 +1,122 @@
+\documentclass[preprint,review,12pt]{elsarticle}
+% ---
+% PACOTES
+% ---
+\usepackage{cmap}				% Mapear caracteres especiais no PDF
+\usepackage{lmodern}			% Usa a fonte Latin Modern			
+\usepackage[T1]{fontenc}		% Selecao de codigos de fonte.
+\usepackage[utf8]{inputenc}		% Codificacao do documento (conversão automática dos acentos)
+\usepackage{lastpage}			% Usado pela Ficha catalográfica
+\usepackage{indentfirst}		% Indenta o primeiro parágrafo de cada seção.
+\usepackage{color,soul}				% Controle das cores
+\usepackage{graphicx}			% Inclusão de gráficos
+\usepackage{subcaption}
+\usepackage{longtable}			% Tabelas longas
+\usepackage{lingmacros}
+\usepackage{booktabs}
+\usepackage{verbatim}
+\usepackage{multicol, blindtext, graphicx}
+\usepackage{multirow}
+
+
+%Setup Listing (Source Code Display)
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+%End Setup
+
+\graphicspath{ {imagens/} }
+
+\journal{Information and Software Technology}
+
+\bibliographystyle{elsarticle-num-names}
+
+\begin{document}
+
+\begin{frontmatter}
+\title{Machine learning techniques for code smells detection: a mapping study}
+
+\author[mymainaddress]{Frederico Luiz Caram\corref{mycorrespondingauthor}}
+\cortext[mycorrespondingauthor]{Corresponding author}
+\ead{fredcaram@gmail.com}
+
+\author[mymainaddress]{Bruno Rodrigues}
+\ead{brunorodriguesti@yahoo.com.br}
+
+\author[mymainaddress]{Amadeu Silveira Campanelli}
+\ead{amadeu@fumec.edu.br}
+
+\author[mymainaddress]{Fernando Silva Parreiras}
+\ead{fernando.parreiras@fumec.br}
+
+\address[mymainaddress]{LAIS Laboratory for Advanced Information Systems, FUMEC University\\ Av. Afonso Pena 3880 \- 30130\-009 \- Belo Horizonte \- MG \- Brazil \- +55 31 3269-5230}
+
+\input{abstract}
+
+\end{frontmatter}
+
+\input{revisao-literatura}
+
+
+
+% use section* for acknowledgment
+\bibliography{referencias}
+
+\appendix
+\section{Selected Articles}
+\label{app:slrArticles}
+\begin{longtable}{|p{0.9\textwidth}|p{0.1\textwidth}|}
+\caption{Articles selected for SLR}
+\label{tab:slrArticles} \\
+\hline
+Article                                                                                                & Author                        \\ \hline
+\hline
+A Bayesian Approach for the Detection of Code and Design Smells                                        & \cite{khomh2009Bayesian}      \\ \hline
+An expert system for determining candidate software classes for refactoring                            & \cite{Kosker2009}             \\ \hline
+Automated scheduling for clone-based refactoring using a competent GA                                  & \cite{lee2011automated}       \\ \hline
+Automatic Metric Thresholds Derivation for Code Smell Detection                                        & \cite{Fontana2015Automatic}   \\ \hline
+Bad-smell prediction from software design model using machine learning techniques                      & \cite{Maneerat2011}           \\ \hline
+BDTEX: A GQM-based Bayesian approach for the detection of anti-patterns                                 & \cite{khomh2011}              \\ \hline
+Co-changing code volume prediction through association rule mining and linear regression model         & \cite{Lee2016Cochanging}      \\ \hline
+Code Bad Smell Detection through Evolutionary Data Mining                                              & \cite{Fu2015}                 \\ \hline
+Code Smell Detection: Towards a Machine Learning-Based Approach                                        & \cite{Fontana2013}            \\ \hline
+Code-Smell Detection As a Bilevel Problem                                                              & \cite{sahin2014code}          \\ \hline
+Evolution of Legacy System Comprehensibility Through Automated Refactoring                             & \cite{Griffith2011}           \\ \hline
+Hidden Truths in Dead Software Paths                                                                   & \cite{Eichberg2015}           \\ \hline
+High Dimensional Search-based Software Engineering                                                     & \cite{Mkaouer2014}            \\ \hline
+IDE-based Real-time Focused Search for Near-miss Clones                                                & \cite{Zibran2012}             \\ \hline
+Identification and application of Extract Class refactorings in object-oriented systems                & \cite{Fokaefs2012}            \\ \hline
+Identifying Extract Class refactoring opportunities using structural and semantic cohesion measures    & \cite{bavota2011}             \\ \hline
+Identifying Method Friendships to Remove the Feature Envy Bad Smell                                    & \cite{Oliveto2011}            \\ \hline
+Mining static and dynamic crosscutting concerns: a role-based approach                                 & \cite{Bernardi2016}           \\ \hline
+Mining Version Histories for Detecting Code Smells                                                     & \cite{Palomba2015Mining}      \\ \hline
+Model refactoring using examples: a search-based approach                                              & \cite{granhem2014model}       \\ \hline
+On the Use of Time Series and Search Based Software Engineering for Refactoring Recommendation         & \cite{Wang2015}               \\ \hline
+Search-based Determination of Refactorings for Improving the Class Structure of Object-oriented Systems& \cite{seng2006search}         \\ \hline
+Software Analytics in Practice: A Defect Prediction Model Using Code Smells                            & \cite{Soltanifar2016}         \\ \hline
+Software Refactoring Under Uncertainty: A Robust Multi-objective Approach                              & \cite{mkaouer2014refactoring} \\ \hline
+Textual Analysis for Code Smell Detection                                                              & \cite{Palomba2015Textual}     \\ \hline
+Using Concept Analysis to Detect Co-change Patterns                                                    & \cite{girba2007} \\ \hline         
+\end{longtable}
+
+\end{document}
